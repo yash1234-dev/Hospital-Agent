@@ -22,9 +22,7 @@ app = FastAPI(
     description="Hospital Operations Intelligence and Patient Management API",
     version="1.0.0",
 )
-app = FastAPI(
-    title="Hospital Operations Intelligence & Patient Management System"
-)
+
 
 # ---------------------------------------------------------
 # CORS CONFIGURATION
