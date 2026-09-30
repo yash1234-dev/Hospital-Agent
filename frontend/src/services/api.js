@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://127.0.0.1:8000"
+const API_BASE_URL = "https://hospital-agent-production-e949.up.railway.app"
 
 export async function runEmergencyTriage(incidentId) {
   const response = await fetch(
