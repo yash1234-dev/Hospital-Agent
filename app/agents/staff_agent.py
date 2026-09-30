@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Any
 
 from app.agents.base_agent import BaseAgent
@@ -119,8 +120,13 @@ class StaffAgent(BaseAgent):
 
         if decision == "ASSIGN_DOCTOR":
 
+            # Only select doctors who are ACTIVE and scheduled as AVAILABLE
+            # for today.  StaffTool defaults to returning AVAILABLE schedules
+            # from any date, which can cause the ActionGateway to reject the
+            # selected doctor with: "Doctor is not scheduled as available today".
             available_doctors = self.staff_tool.run(
                 operation="get_available_doctors",
+                schedule_date=date.today(),
                 department_id=context.department_id,
             )
 

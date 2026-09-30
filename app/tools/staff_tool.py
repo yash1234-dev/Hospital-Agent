@@ -123,6 +123,33 @@ class StaffTool(BaseTool):
             )
 
         # -----------------------------------------------------
+        # Doctor schedule validation
+        # -----------------------------------------------------
+        # The ActionGateway validates the doctor's schedule against
+        # today's date. Validate the same condition here so StaffAgent
+        # does not select a doctor from an old AVAILABLE schedule row.
+        available_today = self.get_available_doctors(
+            schedule_date=date.today()
+        )
+
+        doctor_is_available_today = any(
+            doctor.get("doctor_id") == doctor_id
+            and doctor.get("schedule_status") == "AVAILABLE"
+            and doctor.get("employment_status") == "ACTIVE"
+            for doctor in available_today
+        )
+
+        if not doctor_is_available_today:
+            return {
+                "status": "FAILED",
+                "message": (
+                    f"Doctor {doctor_id} is not scheduled as available today."
+                ),
+                "admission_id": admission_id,
+                "doctor_id": doctor_id,
+            }
+
+        # -----------------------------------------------------
         # Bed prerequisite validation
         # -----------------------------------------------------
 

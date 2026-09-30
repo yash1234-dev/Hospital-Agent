@@ -13,11 +13,14 @@ def get_available_doctors(
     """
     Retrieve active doctors who have an available schedule.
 
-    If schedule_date is not provided, today's date is used.
+    The schedule date is optional. When omitted, availability is not
+    restricted to today; any schedule row with status AVAILABLE may be
+    returned. If a schedule_date is supplied, results are restricted to
+    that date.
 
     Optional filters:
         schedule_date:
-            Date on which the doctor should be available.
+            Optional date on which the doctor should be available.
 
         department_id:
             Restrict results to a specific department.
@@ -31,9 +34,6 @@ def get_available_doctors(
     Returns:
         A list of doctors with their department and schedule details.
     """
-
-    if schedule_date is None:
-        schedule_date = date.today()
 
     query = """
         SELECT
@@ -65,10 +65,13 @@ def get_available_doctors(
 
         WHERE d.employment_status = 'ACTIVE'
           AND ds.status = 'AVAILABLE'
-          AND ds.schedule_date = %s
     """
 
-    parameters: list[Any] = [schedule_date]
+    parameters: list[Any] = []
+
+    if schedule_date is not None:
+        query += " AND ds.schedule_date = %s"
+        parameters.append(schedule_date)
 
     # ---------------------------------------------------------
     # Optional department filter
@@ -128,11 +131,14 @@ def get_available_nurses(
     """
     Retrieve active nurses who have an available schedule.
 
-    If schedule_date is not provided, today's date is used.
+    The schedule date is optional. When omitted, availability is not
+    restricted to today; any schedule row with status AVAILABLE may be
+    returned. If a schedule_date is supplied, results are restricted to
+    that date.
 
     Optional filters:
         schedule_date:
-            Date on which the nurse should be available.
+            Optional date on which the nurse should be available.
 
         department_id:
             Restrict results to a specific department.
@@ -143,9 +149,6 @@ def get_available_nurses(
     Returns:
         A list of nurses with their department and schedule details.
     """
-
-    if schedule_date is None:
-        schedule_date = date.today()
 
     query = """
         SELECT
@@ -176,10 +179,13 @@ def get_available_nurses(
 
         WHERE n.employment_status = 'ACTIVE'
           AND ns.status = 'AVAILABLE'
-          AND ns.schedule_date = %s
     """
 
-    parameters: list[Any] = [schedule_date]
+    parameters: list[Any] = []
+
+    if schedule_date is not None:
+        query += " AND ns.schedule_date = %s"
+        parameters.append(schedule_date)
 
     # ---------------------------------------------------------
     # Optional department filter
