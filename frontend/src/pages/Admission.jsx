@@ -137,7 +137,7 @@ function Admission() {
   const loadDepartments = async () => {
     try {
       const response = await fetch(
-        "http://127.0.0.1:8000/api/admissions/departments"
+       "https://hospital-agent-production-e949.up.railway.app/api/admissions/departments"
       )
       const data = await response.json()
 
@@ -167,7 +167,7 @@ function Admission() {
 
     try {
       const response = await fetch(
-        `http://127.0.0.1:8000/api/admissions/patient/${id}/clinical-summary`
+        `https://hospital-agent-production-e949.up.railway.app/api/admissions/patient/${id}/clinical-summary`
       )
       const data = await response.json()
 
